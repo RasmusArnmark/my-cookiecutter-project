@@ -4,10 +4,11 @@ from cookiecutter1.model import MyAwesomeModel
 from cookiecutter1.data import corrupt_mnist
 import typer
 
+
 def evaluate(model_checkpoint: str) -> None:
     """Evaluate a trained model."""
     print("Evaluating like my life depends on it")
-    path  = "../../models/model_checkpoint.pth"
+    path = "../../models/model_checkpoint.pth"
 
     model = MyAwesomeModel()
 
@@ -23,16 +24,16 @@ def evaluate(model_checkpoint: str) -> None:
     correct = 0
     total = 0
 
-    with torch.no_grad():  
+    with torch.no_grad():
         for images, labels in testloader:
             # Forward pass
             log_ps = model(images)
-            
+
             loss = criterion(log_ps, labels)
             test_loss += loss.item()
-            
-            ps = torch.exp(log_ps) 
-            top_p, top_class = ps.topk(1, dim=1) 
+
+            ps = torch.exp(log_ps)
+            top_p, top_class = ps.topk(1, dim=1)
             correct += (top_class.view(-1) == labels).sum().item()
             total += labels.size(0)
 
@@ -42,6 +43,7 @@ def evaluate(model_checkpoint: str) -> None:
 
     print(f"Test Loss: {avg_loss:.3f}")
     print(f"Test Accuracy: {accuracy:.3%}")
+
 
 if __name__ == "__main__":
     typer.run(evaluate)

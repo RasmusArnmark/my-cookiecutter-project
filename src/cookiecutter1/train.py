@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 from torch import nn, optim
 from torch.utils.data import random_split
 import statistics
+
 app = typer.Typer()
+
 
 def train(lr: float = 1e-3) -> None:
     """Train a model on MNIST."""
@@ -89,6 +91,7 @@ def train(lr: float = 1e-3) -> None:
     axs[1].legend()
     fig.savefig("reports/figures/training_statistics.png")
     plt.show()
+
 
 if __name__ == "__main__":
     typer.run(train)
