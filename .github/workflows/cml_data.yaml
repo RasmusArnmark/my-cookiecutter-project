@@ -3,10 +3,10 @@ name: DVC Workflow
 on:
   pull_request:
     branches:
-    - main
+      - main
     paths:
-    - '**/*.dvc'
-    - '.dvc/**'
+      - '**/*.dvc'
+      - '.dvc/**'
 
 jobs:
   run_data_checker:
@@ -20,16 +20,26 @@ jobs:
       with:
         python-version: 3.11
         cache: 'pip'
-        cache-dependency-path: setup.py
+        cache-dependency-path: requirements.txt
 
     - name: Install dependencies
       run: |
         make dev_requirements
         pip list
 
+    - name: Configure DVC remote with credentials
+      run: |
+        # Parse the GDRIVE_CREDENTIALS secret
+        echo "${{ secrets.GDRIVE_CREDENTIALS }}" > gdrive_credentials.env
+        source gdrive_credentials.env
+
+        # Configure DVC remote with parsed credentials
+        dvc remote modify myremote gdrive_client_id $gdrive_client_id
+        dvc remote modify myremote gdrive_client_secret $gdrive_client_secret
+
     - name: Pull data
       run: |
-        dvc pull --no-run-cache
+        dvc pull --no-run-cache --cloud
 
     - name: Check data statistics
       run: |
