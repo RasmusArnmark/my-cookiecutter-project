@@ -1,20 +1,33 @@
+import sys
+print("Using Python version:", sys.version)
 import torch
 import typer
-from data import corrupt_mnist
-from model import MyAwesomeModel
+from .data import corrupt_mnist
+from .model import MyAwesomeModel
 import matplotlib.pyplot as plt
 from torch import nn, optim
 from torch.utils.data import random_split
 import statistics
+import wandb
 
 app = typer.Typer()
 
 
-def train(lr: float = 1e-3) -> None:
+def train(lr: float = 0.001, batch_size: int = 32, epochs: int = 5) -> None:
     """Train a model on MNIST."""
     print("Training day and night")
     print(f"Learning rate: {lr}")
-
+    wandb.login()
+    run = wandb.init(
+    # Set the project where this run will be logged
+    project="my-awesome-project",
+    # Track hyperparameters and run metadata
+    config={
+        "learning_rate": lr,
+        "epochs": epochs,
+        "batch_size": batch_size,
+    },
+    )
     # Initialize the model and dataset
     model = MyAwesomeModel()
     train_set, _ = corrupt_mnist()
@@ -25,15 +38,13 @@ def train(lr: float = 1e-3) -> None:
     train_data, val_data = random_split(train_set, [train_size, val_size])
 
     # Data loaders
-    trainloader = torch.utils.data.DataLoader(train_data, batch_size=32, shuffle=True)
-    valloader = torch.utils.data.DataLoader(val_data, batch_size=32, shuffle=False)
+    trainloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
+    valloader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, shuffle=False)
 
     # Loss function and optimizer
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
-    # Training setup
-    epochs = 5
     statistics = {"train_loss": [], "val_loss": [], "val_accuracy": []}
 
     for epoch in range(epochs):
@@ -76,9 +87,15 @@ def train(lr: float = 1e-3) -> None:
             f"Val loss: {val_loss_avg:.3f}.. "
             f"Val accuracy: {val_accuracy_avg:.3f}"
         )
+        wandb.log({"accuracy": val_accuracy_avg, "loss": val_loss_avg})
 
     # Save the trained model
+    artifact = wandb.Artifact("trained-model", type="model")
+
     torch.save(model.state_dict(), "models/model_checkpoint.pth")
+
+    artifact.add_file("models/model_checkpoint.pth")
+    artifact.save()
 
     # Plot training statistics
     fig, axs = plt.subplots(1, 2, figsize=(15, 5))
@@ -90,7 +107,7 @@ def train(lr: float = 1e-3) -> None:
     axs[1].set_title("Accuracy")
     axs[1].legend()
     fig.savefig("reports/figures/training_statistics.png")
-    plt.show()
+    wandb.log({"training_statistics": wandb.Image("reports/figures/training_statistics.png")})
 
 
 if __name__ == "__main__":

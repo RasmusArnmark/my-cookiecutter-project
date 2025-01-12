@@ -7,6 +7,7 @@ from cookiecutter1.model import MyAwesomeModel
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
+app = typer.Typer()
 
 def visualize(model_checkpoint: str, figure_name: str = "embeddings.png") -> None:
     """Visualize model predictions."""

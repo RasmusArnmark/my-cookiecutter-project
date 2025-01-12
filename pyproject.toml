@@ -12,13 +12,16 @@ authors = [
 
 readme = "README.md"
 requires-python = ">=3.11"
-dynamic = ["dependencies", "optional-dependencies"]
+dependencies = [
+  "torch>=1.0.0",
+  "typer>=0.3.0",
+]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
-
-[tool.setuptools.dynamic.optional-dependencies]
-dev = {file = ['requirements_dev.txt']}
+[project.optional-dependencies]
+dev = [
+  "pytest>=6.0",
+  "black>=22.3",
+]
 
 [tool.ruff]
 select = ["I"]
@@ -26,3 +29,8 @@ line-length = 120
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[project.scripts]
+train = "cookiecutter1.train:train"
+process-data = "cookiecutter1.data:preprocess_data"
+evaluate = "cookiecutter1.evaluate:evaluate"

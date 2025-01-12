@@ -4,15 +4,16 @@ from cookiecutter1.model import MyAwesomeModel
 from cookiecutter1.data import corrupt_mnist
 import typer
 
+app = typer.Typer()
 
-def evaluate(model_checkpoint: str) -> None:
+def evaluate() -> None:
     """Evaluate a trained model."""
     print("Evaluating like my life depends on it")
-    path = "../../models/model_checkpoint.pth"
+    path = "models/model_checkpoint.pth"
 
     model = MyAwesomeModel()
 
-    state_dict = torch.load(model_checkpoint)
+    state_dict = torch.load(path)
     model.load_state_dict(state_dict)
     _, test_set = corrupt_mnist()
 

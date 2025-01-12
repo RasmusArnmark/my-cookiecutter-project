@@ -1,0 +1,5 @@
+[default]
+project = my_awesome_project
+entity = rasmusarnmark-danmarks-tekniske-universitet-dtu
+base_url = https://api.wandb.ai
+
