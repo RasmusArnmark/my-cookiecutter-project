@@ -40,7 +40,7 @@ def corrupt_mnist() -> tuple[torch.utils.data.Dataset, torch.utils.data.Dataset]
     test_images = torch.load("data/processed/test_images.pt", weights_only=True)
     test_target = torch.load("data/processed/test_target.pt", weights_only=True)
 
-
+    print("Train images shape:", train_images.shape)
     train_set = torch.utils.data.TensorDataset(train_images, train_target)
     test_set = torch.utils.data.TensorDataset(test_images, test_target)
     return train_set, test_set
