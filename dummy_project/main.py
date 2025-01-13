@@ -16,7 +16,6 @@ if __name__ == "__main__":
 
     # Learn the digits on the train subset
     clf.fit(X_train, y_train)
-    a = 1
     # Predict the value of the digit on the test subset
     predicted = clf.predict(X_test)
 
