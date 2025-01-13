@@ -43,7 +43,7 @@ def train(lr: float = 0.001, batch_size: int = 32, epochs: int = 5) -> None:
     # Loss function and optimizer
     criterion = nn.NLLLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-
+    a = 1
     statistics = {"train_loss": [], "val_loss": [], "val_accuracy": []}
 
     for epoch in range(epochs):
