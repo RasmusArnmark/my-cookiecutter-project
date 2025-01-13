@@ -1,0 +1,21 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    'dummy_project',  # Specify the build context
+    '-t',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/dummy-repo/dummy-image',
+    '-f',
+    'dummy_project/Dockerfile'  # Specify the path to the Dockerfile
+  ]
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/dummy-repo/dummy-image'
+  ]
+
+images:
+- 'europe-west1-docker.pkg.dev/$PROJECT_ID/dummy-repo/dummy-image'
