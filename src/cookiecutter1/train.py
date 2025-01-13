@@ -36,7 +36,7 @@ def train(lr: float = 0.001, batch_size: int = 32, epochs: int = 5) -> None:
     train_size = int(0.8 * len(train_set))  # 80% for training
     val_size = len(train_set) - train_size  # Remaining 20% for validation
     train_data, val_data = random_split(train_set, [train_size, val_size])
-
+    v = 1
     # Data loaders
     trainloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
     valloader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, shuffle=False)
