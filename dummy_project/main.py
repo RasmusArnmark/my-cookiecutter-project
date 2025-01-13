@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Split data into 50% train and 50% test subsets
     X_train, X_test, y_train, y_test = train_test_split(data, digits.target, test_size=0.5, shuffle=False)
-
+    a = 1
     # Learn the digits on the train subset
     clf.fit(X_train, y_train)
     # Predict the value of the digit on the test subset
