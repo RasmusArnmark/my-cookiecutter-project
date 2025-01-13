@@ -5,7 +5,7 @@ from invoke import Context, task
 WINDOWS = os.name == "nt"
 PROJECT_NAME = "cookiecutter1"
 PYTHON_VERSION = "3.11"
-
+a = 1
 # Setup commands
 @task
 def create_environment(ctx: Context) -> None:
