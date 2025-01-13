@@ -20,24 +20,19 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: 3.11
-        cache: 'pip'
-        cache-dependency-path: requirements.txt
+
+    - name: Cache Python Dependencies
+      id: cache-dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
     - name: Install Dependencies
+      if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: pip install -r requirements.txt
-
-    - name: Authenticate with GCP
-      run: |
-        printf '%s' "${{ secrets.GCP_CREDENTIALS }}" > gcp-key.json
-        export GOOGLE_APPLICATION_CREDENTIALS=gcp-key.json
-        gcloud auth activate-service-account --key-file=gcp-key.json
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
-
-    - name: Pull DVC Data
-      run: |
-        dvc pull
-        ls data/processed  # Verify the file is present
 
     - name: Run Tests
       run: pytest -v
