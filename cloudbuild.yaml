@@ -18,6 +18,3 @@ steps:
 
 images:
 - 'europe-west1-docker.pkg.dev/dvc-447620/dummy-repo/dummy-image'
-
-options:
-  logging: NONE  # Disable logging to avoid requiring a logs bucket
